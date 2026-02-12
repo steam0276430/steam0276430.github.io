@@ -6,91 +6,62 @@
 <title>PITOJO Company - Formations IA</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-/* SECTION WHY */
-.why {
-    padding: 80px 20px;
-    text-align: center;
-}
 
-.why h2 {
-    margin-bottom: 50px;
-}
-
-.why-grid {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-}
-
-.why-card {
-    background: rgba(255, 255, 255, 0.06);
-    padding: 35px;
-    border-radius: 20px;
-    width: 280px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.why-card:hover {
-    transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 25px 60px rgba(0, 150, 255, 0.4);
-}
-}
-/* Animation apparition */
-
-.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s ease forwards;
-}
-
-@keyframes fadeUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-<style>
+/* GLOBAL */
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    background: radial-gradient(circle at center, #0a0f1c 0%, #05080f 100%);
-    color: white;
+    background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+    color: #e2e8f0;
 }
+
+h2 {
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+/* NAVBAR */
 
 nav {
     display: flex;
     justify-content: space-between;
-    padding: 20px 10%;
+    padding: 25px 10%;
     align-items: center;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
 }
 
 nav h2 {
     font-weight: 700;
-    color: #3b82f6;
+    color: #38bdf8;
 }
 
 nav a {
-    color: white;
+    color: #cbd5e1;
     text-decoration: none;
-    margin-left: 20px;
-    font-weight: 500;
+    margin-left: 25px;
+    transition: 0.3s;
 }
 
+nav a:hover {
+    color: #38bdf8;
+}
+
+/* HERO */
+
 .hero {
-    padding: 140px 20px;
+    padding: 160px 20px;
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 48px;
+    font-size: 52px;
     font-weight: 700;
     margin-bottom: 20px;
-    background: linear-gradient(90deg, #00d4ff, #4facfe);
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -98,65 +69,92 @@ nav a {
 .hero p {
     font-size: 18px;
     max-width: 700px;
-    margin: 0 auto 30px auto;
+    margin: 0 auto 40px auto;
     opacity: 0.8;
 }
-}
+
+/* BUTTON */
 
 .btn {
     display: inline-block;
-    background: linear-gradient(90deg, #00c6ff, #0072ff);
-    padding: 14px 28px;
-    border-radius: 30px;
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    padding: 14px 32px;
+    border-radius: 40px;
     color: white;
     font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0, 150, 255, 0.5);
+    transform: scale(1.08);
+    box-shadow: 0 15px 40px rgba(56,189,248,0.5);
 }
-}
+
+/* SECTIONS */
 
 .section {
-    padding: 80px 10%;
+    padding: 100px 10%;
     text-align: center;
 }
 
-.cards {
+/* CARDS */
+
+.cards, .why-grid {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
     flex-wrap: wrap;
-    margin-top: 40px;
 }
 
-.card {
+.card, .why-card {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 30px;
-    transition: 0.3s ease;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 35px;
+    width: 280px;
+    transition: 0.4s ease;
 }
 
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 150, 255, 0.3);
-}
+.card:hover, .why-card:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 30px 60px rgba(56,189,248,0.3);
 }
 
-.card h3 {
-    color: #3b82f6;
+.card h3, .why-card h3 {
+    color: #38bdf8;
+    margin-bottom: 15px;
 }
+
+/* ANIMATION */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s ease forwards;
+}
+
+.why-card:nth-child(1) { animation-delay: 0.2s; }
+.why-card:nth-child(2) { animation-delay: 0.4s; }
+.why-card:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* FOOTER */
 
 footer {
-    padding: 40px;
+    padding: 50px;
     text-align: center;
-    background: #0a0f1c;
-    color: #6b7280;
+    background: #020617;
+    color: #64748b;
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 </style>
@@ -183,7 +181,6 @@ footer {
     <h2>Nos Formations</h2>
 
     <div class="cards">
-
         <div class="card">
             <h3>IA Fondamentale</h3>
             <p>Comprendre l’intelligence artificielle et ses applications concrètes.</p>
@@ -198,35 +195,28 @@ footer {
             <h3>IA pour Entrepreneurs</h3>
             <p>Utiliser l’IA pour augmenter productivité, ventes et performance.</p>
         </div>
-
     </div>
 </section>
+
 <section class="section why">
     <h2>Pourquoi choisir PITOJO Company ?</h2>
     <div class="why-grid">
+
         <div class="why-card fade-in">
-            .why-card:nth-child(1) { animation-delay: 0.2s; }
-.why-card:nth-child(2) { animation-delay: 0.4s; }
-.why-card:nth-child(3) { animation-delay: 0.6s; }
             <h3>🚀 Expertise IA</h3>
             <p>Des formations concrètes adaptées aux entrepreneurs et entreprises modernes.</p>
         </div>
 
         <div class="why-card fade-in">
-            .why-card:nth-child(1) { animation-delay: 0.2s; }
-.why-card:nth-child(2) { animation-delay: 0.4s; }
-.why-card:nth-child(3) { animation-delay: 0.6s; }
             <h3>⚙️ Automatisation réelle</h3>
             <p>Créez des systèmes intelligents pour automatiser votre business.</p>
         </div>
 
         <div class="why-card fade-in">
-            .why-card:nth-child(1) { animation-delay: 0.2s; }
-.why-card:nth-child(2) { animation-delay: 0.4s; }
-.why-card:nth-child(3) { animation-delay: 0.6s; }
             <h3>📈 Résultats mesurables</h3>
             <p>Augmentez votre productivité et votre performance rapidement.</p>
         </div>
+
     </div>
 </section>
 
@@ -234,8 +224,6 @@ footer {
     <h2>À propos de PITOJO Company</h2>
     <p>Startup spécialisée en formation IA, accompagnement stratégique et transformation digitale des entreprises.</p>
 </section>
-
-}
 
 <section class="section" id="contact">
     <h2>Contact</h2>
@@ -246,8 +234,5 @@ footer {
     © 2026 PITOJO Company — Tous droits réservés
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="background.js"></script>
 </body>
 </html>
-
