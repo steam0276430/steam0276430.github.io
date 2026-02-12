@@ -1,16 +1,23 @@
-/* ===============================
-   PITOJO - NEBULA GALAXY SHADER
-   =============================== */
+/* =========================================
+   PITOJO - AI HOLOGRAPHIC NETWORK SYSTEM
+   ========================================= */
 
 const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x050810, 0.08);
 
-const camera = new THREE.OrthographicCamera(
-  -1, 1, 1, -1, 0, 1
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  100
 );
+
+camera.position.z = 12;
 
 const renderer = new THREE.WebGLRenderer({
   alpha: true,
-  antialias: true
+  antialias: true,
+  powerPreference: "high-performance"
 });
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,105 +28,159 @@ renderer.domElement.style.left = "0";
 renderer.domElement.style.zIndex = "-1";
 document.body.appendChild(renderer.domElement);
 
-/* ===============================
-   SHADER MATERIAL
-   =============================== */
+/* =========================================
+   PARTICLES SYSTEM
+   ========================================= */
 
-const uniforms = {
-  u_time: { value: 0 },
-  u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-};
+const isMobile = window.innerWidth < 768;
+const PARTICLE_COUNT = isMobile ? 700 : 1600;
+const MAX_DISTANCE = 1.7;
 
-const material = new THREE.ShaderMaterial({
-  uniforms,
-  vertexShader: `
-    void main() {
-      gl_Position = vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: `
-    uniform float u_time;
-    uniform vec2 u_resolution;
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(PARTICLE_COUNT * 3);
+const velocities = [];
 
-    // Simple noise
-    float random(vec2 st) {
-        return fract(sin(dot(st.xy,
-                     vec2(12.9898,78.233)))*
-            43758.5453123);
-    }
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  const i3 = i * 3;
 
-    float noise(vec2 st) {
-        vec2 i = floor(st);
-        vec2 f = fract(st);
+  positions[i3] = (Math.random() - 0.5) * 25;
+  positions[i3 + 1] = (Math.random() - 0.5) * 25;
+  positions[i3 + 2] = (Math.random() - 0.5) * 25;
 
-        float a = random(i);
-        float b = random(i + vec2(1.0, 0.0));
-        float c = random(i + vec2(0.0, 1.0));
-        float d = random(i + vec2(1.0, 1.0));
+  velocities.push({
+    x: (Math.random() - 0.5) * 0.002,
+    y: (Math.random() - 0.5) * 0.002,
+    z: (Math.random() - 0.5) * 0.002
+  });
+}
 
-        vec2 u = f*f*(3.0-2.0*f);
+geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-        return mix(a, b, u.x) +
-                (c - a)* u.y * (1.0 - u.x) +
-                (d - b) * u.x * u.y;
-    }
+/* HOLOGRAPHIC PARTICLE MATERIAL */
 
-    void main() {
-
-        vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-        vec2 p = uv - 0.5;
-        p.x *= u_resolution.x / u_resolution.y;
-
-        float t = u_time * 0.03;
-
-        float n = 0.0;
-        n += noise(p * 3.0 + t);
-        n += 0.5 * noise(p * 6.0 - t);
-        n += 0.25 * noise(p * 12.0 + t * 0.5);
-
-        float intensity = smoothstep(0.2, 0.8, n);
-
-        vec3 deepBlue = vec3(0.02, 0.05, 0.12);
-        vec3 cyan = vec3(0.0, 0.7, 1.0);
-        vec3 indigo = vec3(0.3, 0.3, 0.8);
-
-        vec3 color = mix(deepBlue, cyan, intensity * 0.6);
-        color = mix(color, indigo, intensity * 0.3);
-
-        // Subtle radial fade
-        float dist = length(p);
-        color *= smoothstep(0.8, 0.2, dist);
-
-        gl_FragColor = vec4(color, 0.9);
-    }
-  `,
-  transparent: true
+const particleMaterial = new THREE.PointsMaterial({
+  size: isMobile ? 0.05 : 0.035,
+  color: 0x38bdf8,
+  transparent: true,
+  opacity: 0.9,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
 });
 
-const geometry = new THREE.PlaneGeometry(2, 2);
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+const particles = new THREE.Points(geometry, particleMaterial);
+scene.add(particles);
 
-/* ===============================
-   ANIMATION
-   =============================== */
+/* =========================================
+   CONNECTION LINES
+   ========================================= */
+
+const lineMaterial = new THREE.LineBasicMaterial({
+  color: 0x00ccff,
+  transparent: true,
+  opacity: 0.15,
+  blending: THREE.AdditiveBlending
+});
+
+const lineGeometry = new THREE.BufferGeometry();
+const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+scene.add(lines);
+
+/* =========================================
+   MOUSE PARALLAX
+   ========================================= */
+
+let mouse = { x: 0, y: 0 };
+
+document.addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / window.innerWidth - 0.5) * 2;
+  mouse.y = (event.clientY / window.innerHeight - 0.5) * 2;
+});
+
+/* =========================================
+   DATA PULSE SYSTEM
+   ========================================= */
+
+let pulse = 0;
+
+/* =========================================
+   ANIMATION LOOP
+   ========================================= */
 
 function animate() {
   requestAnimationFrame(animate);
 
-  uniforms.u_time.value += 0.5;
+  pulse += 0.02;
+
+  const posArray = geometry.attributes.position.array;
+  const linePositions = [];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const i3 = i * 3;
+
+    posArray[i3] += velocities[i].x;
+    posArray[i3 + 1] += velocities[i].y;
+    posArray[i3 + 2] += velocities[i].z;
+
+    for (let axis = 0; axis < 3; axis++) {
+      if (posArray[i3 + axis] > 12 || posArray[i3 + axis] < -12) {
+        velocities[i][["x","y","z"][axis]] *= -1;
+      }
+    }
+  }
+
+  /* CONNECTION CALCULATION */
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let j = i + 1; j < PARTICLE_COUNT; j++) {
+
+      const dx = posArray[i*3] - posArray[j*3];
+      const dy = posArray[i*3+1] - posArray[j*3+1];
+      const dz = posArray[i*3+2] - posArray[j*3+2];
+
+      const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+      if (dist < MAX_DISTANCE) {
+        const alpha = 1.0 - dist / MAX_DISTANCE;
+
+        linePositions.push(
+          posArray[i*3], posArray[i*3+1], posArray[i*3+2],
+          posArray[j*3], posArray[j*3+1], posArray[j*3+2]
+        );
+      }
+    }
+  }
+
+  lineGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(linePositions, 3)
+  );
+
+  geometry.attributes.position.needsUpdate = true;
+
+  /* HOLOGRAPHIC PULSE EFFECT */
+  const glow = 0.8 + Math.sin(pulse) * 0.2;
+  particleMaterial.opacity = glow;
+  lineMaterial.opacity = 0.1 + Math.sin(pulse * 0.5) * 0.05;
+
+  /* Subtle rotation */
+  particles.rotation.y += 0.0003;
+  particles.rotation.x += 0.00015;
+  lines.rotation.copy(particles.rotation);
+
+  /* Smooth parallax */
+  camera.position.x += (mouse.x * 2 - camera.position.x) * 0.02;
+  camera.position.y += (-mouse.y * 2 - camera.position.y) * 0.02;
 
   renderer.render(scene, camera);
 }
 
 animate();
 
-/* ===============================
+/* =========================================
    RESIZE
-   =============================== */
+   ========================================= */
 
 window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
-  uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
-});
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 });
