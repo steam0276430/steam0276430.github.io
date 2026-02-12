@@ -3,82 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Steam IA Academy</title>
+<title>PITOJO Company - Formations IA</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0f172a;
+    font-family: 'Inter', sans-serif;
+    background: #0a0f1c;
     color: white;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 10%;
+    align-items: center;
+}
+
+nav h2 {
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+}
+
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(180deg, #0a0f1c 0%, #111827 100%);
+}
+
+.hero h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #9ca3af;
+    max-width: 700px;
+    margin: auto;
+}
+
+.btn {
+    margin-top: 30px;
+    padding: 14px 28px;
+    background: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background: #2563eb;
+}
+
+.section {
+    padding: 80px 10%;
     text-align: center;
 }
 
-header {
-    padding: 60px 20px;
-}
-
-h1 {
-    font-size: 42px;
-}
-
-section {
-    padding: 50px 20px;
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
 }
 
 .card {
-    background: #1e293b;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 500px;
-    border-radius: 10px;
+    background: #111827;
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    transition: 0.3s;
 }
 
-button {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    cursor: pointer;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-button:hover {
-    background: #1d4ed8;
+.card h3 {
+    color: #3b82f6;
 }
+
+footer {
+    padding: 40px;
+    text-align: center;
+    background: #0a0f1c;
+    color: #6b7280;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Steam IA Academy</h1>
-    <p>Formations professionnelles en Intelligence Artificielle</p>
-</header>
-
-<section>
-    <h2>Mes Formations</h2>
-
-    <div class="card">
-        <h3>Formation IA Débutant</h3>
-        <p>Comprendre et utiliser l'IA dans le quotidien et le business.</p>
+<nav>
+    <h2>PITOJO Company</h2>
+    <div>
+        <a href="#formations">Formations</a>
+        <a href="#about">À propos</a>
+        <a href="#contact">Contact</a>
     </div>
+</nav>
 
-    <div class="card">
-        <h3>Formation ChatGPT Pro</h3>
-        <p>Automatiser, créer du contenu et booster sa productivité.</p>
-    </div>
+<section class="hero">
+    <h1>Formations Professionnelles en Intelligence Artificielle</h1>
+    <p>Nous aidons entrepreneurs et entreprises à maîtriser l'IA, automatiser leurs systèmes et générer plus de valeur grâce aux nouvelles technologies.</p>
+    <button class="btn">Réserver un appel stratégique</button>
+</section>
 
-    <div class="card">
-        <h3>Automatisation & Business IA</h3>
-        <p>Créer des systèmes intelligents pour générer des revenus.</p>
+<section class="section" id="formations">
+    <h2>Nos Formations</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>IA Fondamentale</h3>
+            <p>Comprendre l’intelligence artificielle et ses applications concrètes.</p>
+        </div>
+
+        <div class="card">
+            <h3>ChatGPT & Automatisation</h3>
+            <p>Créer des systèmes intelligents pour automatiser votre business.</p>
+        </div>
+
+        <div class="card">
+            <h3>IA pour Entrepreneurs</h3>
+            <p>Utiliser l’IA pour augmenter productivité, ventes et performance.</p>
+        </div>
+
     </div>
 </section>
 
-<section>
+<section class="section" id="about">
+    <h2>À propos de PITOJO Company</h2>
+    <p>Startup spécialisée en formation IA, accompagnement stratégique et transformation digitale des entreprises.</p>
+</section>
+
+<section class="section" id="contact">
     <h2>Contact</h2>
-    <p>Email : contact@tonemail.com</p>
+    <p>Email : contact@pitojo-company.com</p>
 </section>
+
+<footer>
+    © 2026 PITOJO Company — Tous droits réservés
+</footer>
 
 </body>
 </html>
-
