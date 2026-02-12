@@ -23,8 +23,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Canvas background */
-
 #bg {
     position: fixed;
     top: 0;
@@ -41,21 +39,24 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 25px 10%;
+    padding: 18px 8%;
     background: rgba(5, 8, 16, 0.6);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255,255,255,0.05);
+    z-index: 10;
 }
 
 nav h2 {
     color: #38bdf8;
     font-weight: 800;
+    font-size: 20px;
 }
 
 nav a {
     color: #cbd5e1;
     text-decoration: none;
-    margin-left: 30px;
+    margin-left: 25px;
+    font-size: 15px;
     transition: 0.3s;
 }
 
@@ -66,33 +67,34 @@ nav a:hover {
 /* ================= HERO ================= */
 
 .hero {
-    height: 100vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0 20px;
+    padding: 120px 20px 40px 20px;
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 56px;
+    font-size: 48px;
     font-weight: 800;
     background: linear-gradient(90deg, #38bdf8, #6366f1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .hero p {
-    max-width: 700px;
-    font-size: 18px;
+    max-width: 600px;
+    font-size: 17px;
     opacity: 0.8;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
+    line-height: 1.6;
 }
 
 .btn {
-    padding: 16px 36px;
+    padding: 14px 32px;
     border-radius: 40px;
     background: linear-gradient(90deg, #0ea5e9, #6366f1);
     color: white;
@@ -103,20 +105,20 @@ nav a:hover {
 }
 
 .btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 20px 50px rgba(56,189,248,0.6);
+    transform: scale(1.05);
+    box-shadow: 0 20px 50px rgba(56,189,248,0.4);
 }
 
 /* ================= SECTIONS ================= */
 
 .section {
-    padding: 120px 10%;
+    padding: 80px 8%;
     text-align: center;
 }
 
 .section h2 {
-    font-size: 36px;
-    margin-bottom: 60px;
+    font-size: 32px;
+    margin-bottom: 50px;
 }
 
 /* ================= CARDS ================= */
@@ -124,23 +126,23 @@ nav a:hover {
 .cards, .why-grid {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 30px;
     flex-wrap: wrap;
 }
 
 .card, .why-card {
-    width: 300px;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.05);
+    width: 280px;
+    padding: 35px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.04);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.08);
     transition: 0.4s;
 }
 
 .card:hover, .why-card:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 30px 70px rgba(56,189,248,0.4);
+    transform: translateY(-10px);
+    box-shadow: 0 25px 60px rgba(56,189,248,0.3);
 }
 
 .card h3, .why-card h3 {
@@ -151,22 +153,46 @@ nav a:hover {
 /* ================= FOOTER ================= */
 
 footer {
-    padding: 60px;
+    padding: 40px;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.05);
     color: #64748b;
+    font-size: 14px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= MOBILE ================= */
 
 @media(max-width: 768px) {
-    .hero h1 {
-        font-size: 36px;
+
+    nav {
+        padding: 15px 5%;
     }
+
+    nav div {
+        display: none;
+    }
+
+    .hero {
+        padding-top: 100px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .section {
+        padding: 60px 6%;
+    }
+
 }
 
 </style>
 </head>
+
 <body>
 
 <canvas id="bg"></canvas>
@@ -238,32 +264,51 @@ footer {
 
 <script>
 
-/* ================= ANIMATED NETWORK BACKGROUND ================= */
+/* ================= PREMIUM NETWORK ANIMATION ================= */
 
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 let particles = [];
-const numberOfParticles = 120;
+let mouse = { x: null, y: null };
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const numberOfParticles = window.innerWidth < 768 ? 60 : 120;
 
 class Particle {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = 2;
-        this.speedX = (Math.random() - 0.5) * 1;
-        this.speedY = (Math.random() - 0.5) * 1;
+        this.speedX = (Math.random() - 0.5) * 0.6;
+        this.speedY = (Math.random() - 0.5) * 0.6;
+        this.size = 1.5;
     }
+
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
         if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
         if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+        if (mouse.x && mouse.y) {
+            let dx = this.x - mouse.x;
+            let dy = this.y - mouse.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 120) {
+                this.x += dx / 20;
+                this.y += dy / 20;
+            }
+        }
     }
+
     draw() {
         ctx.fillStyle = "#38bdf8";
         ctx.beginPath();
@@ -286,8 +331,9 @@ function connect() {
             let dy = particles[a].y - particles[b].y;
             let distance = dx * dx + dy * dy;
 
-            if (distance < 10000) {
-                ctx.strokeStyle = "rgba(56,189,248,0.08)";
+            if (distance < 9000) {
+                let opacity = 1 - distance / 9000;
+                ctx.strokeStyle = "rgba(56,189,248," + opacity * 0.15 + ")";
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particles[a].x, particles[a].y);
@@ -308,14 +354,13 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
+window.addEventListener("mousemove", function(e) {
+    mouse.x = e.x;
+    mouse.y = e.y;
+});
+
 init();
 animate();
-
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    init();
-});
 
 </script>
 
