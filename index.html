@@ -7,6 +7,36 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+/* SECTION WHY */
+.why {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.why h2 {
+    margin-bottom: 50px;
+}
+
+.why-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.why-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    width: 280px;
+    transition: 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.why-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 150, 255, 0.3);
+}
 <style>
 
 body {
@@ -83,15 +113,18 @@ nav a {
 }
 
 .card {
-    background: #111827;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
     padding: 30px;
-    border-radius: 12px;
-    width: 300px;
-    transition: 0.3s;
+    transition: 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 150, 255, 0.3);
+}
 }
 
 .card h3 {
@@ -147,11 +180,32 @@ footer {
 
     </div>
 </section>
+<section class="section why">
+    <h2>Pourquoi choisir PITOJO Company ?</h2>
+    <div class="why-grid">
+        <div class="why-card">
+            <h3>🚀 Expertise IA</h3>
+            <p>Des formations concrètes adaptées aux entrepreneurs et entreprises modernes.</p>
+        </div>
+
+        <div class="why-card">
+            <h3>⚙️ Automatisation réelle</h3>
+            <p>Créez des systèmes intelligents pour automatiser votre business.</p>
+        </div>
+
+        <div class="why-card">
+            <h3>📈 Résultats mesurables</h3>
+            <p>Augmentez votre productivité et votre performance rapidement.</p>
+        </div>
+    </div>
+</section>
 
 <section class="section" id="about">
     <h2>À propos de PITOJO Company</h2>
     <p>Startup spécialisée en formation IA, accompagnement stratégique et transformation digitale des entreprises.</p>
 </section>
+
+}
 
 <section class="section" id="contact">
     <h2>Contact</h2>
@@ -166,3 +220,4 @@ footer {
 <script src="background.js"></script>
 </body>
 </html>
+
