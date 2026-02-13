@@ -1,229 +1,154 @@
-import * as THREE from "three";
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
 
-/* =========================================
-   PITOJO - AI HOLOGRAPHIC NETWORK SYSTEM PRO
-   ========================================= */
+canvas.style.position = "fixed";
+canvas.style.top = "0";
+canvas.style.left = "0";
+canvas.style.zIndex = "-1";
 
-const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x050810, 0.07);
-
-/* CAMERA */
-const camera = new THREE.PerspectiveCamera(
-  60,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  200
-);
-camera.position.z = 14;
-
-/* RENDERER */
-const renderer = new THREE.WebGLRenderer({
-  alpha: true,
-  antialias: true,
-  powerPreference: "high-performance",
-});
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.domElement.style.position = "fixed";
-renderer.domElement.style.top = "0";
-renderer.domElement.style.left = "0";
-renderer.domElement.style.zIndex = "-1";
-document.body.appendChild(renderer.domElement);
-
-/* =========================================
-   CONFIG
-   ========================================= */
+let w, h;
+function resize() {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
 
 const isMobile = window.innerWidth < 768;
-const PARTICLE_COUNT = isMobile ? 500 : 1200;
-const WORLD_SIZE = 18;
-const MAX_DISTANCE = 1.6;
-const SPEED = 0.003;
+const PARTICLES = isMobile ? 70 : 140;
+const MAX_DIST = isMobile ? 130 : 170;
 
-/* =========================================
-   PARTICLES
-   ========================================= */
+let mouse = { x: w / 2, y: h / 2 };
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
 
-const geometry = new THREE.BufferGeometry();
-const positions = new Float32Array(PARTICLE_COUNT * 3);
-const velocities = new Float32Array(PARTICLE_COUNT * 3);
+class Particle {
+  constructor() {
+    this.reset();
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+  }
 
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-  const i3 = i * 3;
+  reset() {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.vx = (Math.random() - 0.5) * 0.8;
+    this.vy = (Math.random() - 0.5) * 0.8;
+    this.size = Math.random() * 2 + 1;
+  }
 
-  positions[i3] = (Math.random() - 0.5) * WORLD_SIZE;
-  positions[i3 + 1] = (Math.random() - 0.5) * WORLD_SIZE;
-  positions[i3 + 2] = (Math.random() - 0.5) * WORLD_SIZE;
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
 
-  velocities[i3] = (Math.random() - 0.5) * SPEED;
-  velocities[i3 + 1] = (Math.random() - 0.5) * SPEED;
-  velocities[i3 + 2] = (Math.random() - 0.5) * SPEED;
+    if (this.x < 0 || this.x > w) this.vx *= -1;
+    if (this.y < 0 || this.y > h) this.vy *= -1;
+
+    // attraction légère vers la souris
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    this.x += dx * 0.0002;
+    this.y += dy * 0.0002;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
+    ctx.fillStyle = "rgba(56,189,248,0.9)";
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "rgba(56,189,248,0.8)";
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
 }
 
-geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-
-/* PARTICLE MATERIAL */
-const particleMaterial = new THREE.PointsMaterial({
-  size: isMobile ? 0.06 : 0.04,
-  color: 0x38bdf8,
-  transparent: true,
-  opacity: 0.9,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-});
-
-const particles = new THREE.Points(geometry, particleMaterial);
-scene.add(particles);
-
-/* =========================================
-   CENTRAL CORE GLOW (entreprise tech vibe)
-   ========================================= */
-
-const coreGeometry = new THREE.SphereGeometry(0.6, 32, 32);
-const coreMaterial = new THREE.MeshBasicMaterial({
-  color: 0x00ccff,
-  transparent: true,
-  opacity: 0.35,
-});
-
-const core = new THREE.Mesh(coreGeometry, coreMaterial);
-scene.add(core);
-
-/* =========================================
-   CONNECTION LINES
-   ========================================= */
-
-const lineMaterial = new THREE.LineBasicMaterial({
-  color: 0x00ccff,
-  transparent: true,
-  opacity: 0.12,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-});
-
-const lineGeometry = new THREE.BufferGeometry();
-const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
-scene.add(lines);
-
-/* =========================================
-   MOUSE PARALLAX
-   ========================================= */
-
-let mouseX = 0;
-let mouseY = 0;
-
-document.addEventListener("mousemove", (event) => {
-  mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-});
-
-/* =========================================
-   PERFORMANCE OPTIMIZATION
-   (limit max connections)
-   ========================================= */
-
-const MAX_CONNECTIONS = isMobile ? 1200 : 3000;
-
-/* =========================================
-   ANIMATION LOOP
-   ========================================= */
+const particles = [];
+for (let i = 0; i < PARTICLES; i++) particles.push(new Particle());
 
 let pulse = 0;
+
+function drawBackgroundGlow() {
+  const gradient = ctx.createRadialGradient(
+    w / 2,
+    h / 2,
+    100,
+    w / 2,
+    h / 2,
+    w
+  );
+
+  gradient.addColorStop(0, "rgba(0,200,255,0.08)");
+  gradient.addColorStop(0.5, "rgba(0,50,120,0.04)");
+  gradient.addColorStop(1, "rgba(0,0,0,0.95)");
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, w, h);
+}
+
+function connectParticles() {
+  for (let a = 0; a < particles.length; a++) {
+    for (let b = a + 1; b < particles.length; b++) {
+      const dx = particles[a].x - particles[b].x;
+      const dy = particles[a].y - particles[b].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < MAX_DIST) {
+        const opacity = (1 - dist / MAX_DIST) * 0.3;
+
+        ctx.strokeStyle = `rgba(0,204,255,${opacity})`;
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(particles[a].x, particles[a].y);
+        ctx.lineTo(particles[b].x, particles[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function drawScanLines() {
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = "#00ccff";
+
+  for (let y = 0; y < h; y += 5) {
+    ctx.fillRect(0, y, w, 1);
+  }
+  ctx.globalAlpha = 1;
+}
 
 function animate() {
   requestAnimationFrame(animate);
 
   pulse += 0.02;
 
-  const posArray = geometry.attributes.position.array;
+  ctx.clearRect(0, 0, w, h);
 
-  /* MOVE PARTICLES */
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const i3 = i * 3;
+  drawBackgroundGlow();
 
-    posArray[i3] += velocities[i3];
-    posArray[i3 + 1] += velocities[i3 + 1];
-    posArray[i3 + 2] += velocities[i3 + 2];
+  particles.forEach((p) => {
+    p.update();
+    p.draw();
+  });
 
-    // bounce inside cube
-    if (posArray[i3] > WORLD_SIZE / 2 || posArray[i3] < -WORLD_SIZE / 2)
-      velocities[i3] *= -1;
-    if (posArray[i3 + 1] > WORLD_SIZE / 2 || posArray[i3 + 1] < -WORLD_SIZE / 2)
-      velocities[i3 + 1] *= -1;
-    if (posArray[i3 + 2] > WORLD_SIZE / 2 || posArray[i3 + 2] < -WORLD_SIZE / 2)
-      velocities[i3 + 2] *= -1;
-  }
+  connectParticles();
 
-  /* CONNECTIONS */
-  const linePositions = [];
-  let connections = 0;
+  // core pulse
+  const coreSize = 80 + Math.sin(pulse) * 15;
+  const core = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, coreSize);
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    for (let j = i + 1; j < PARTICLE_COUNT; j++) {
-      if (connections > MAX_CONNECTIONS) break;
+  core.addColorStop(0, "rgba(0,204,255,0.22)");
+  core.addColorStop(1, "rgba(0,0,0,0)");
 
-      const ax = posArray[i * 3];
-      const ay = posArray[i * 3 + 1];
-      const az = posArray[i * 3 + 2];
+  ctx.fillStyle = core;
+  ctx.beginPath();
+  ctx.arc(w / 2, h / 2, coreSize, 0, Math.PI * 2);
+  ctx.fill();
 
-      const bx = posArray[j * 3];
-      const by = posArray[j * 3 + 1];
-      const bz = posArray[j * 3 + 2];
-
-      const dx = ax - bx;
-      const dy = ay - by;
-      const dz = az - bz;
-
-      const dist = dx * dx + dy * dy + dz * dz;
-
-      if (dist < MAX_DISTANCE * MAX_DISTANCE) {
-        linePositions.push(ax, ay, az, bx, by, bz);
-        connections++;
-      }
-    }
-  }
-
-  lineGeometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(linePositions, 3)
-  );
-
-  geometry.attributes.position.needsUpdate = true;
-
-  /* HOLOGRAPHIC PULSE EFFECT */
-  const glow = 0.75 + Math.sin(pulse) * 0.25;
-  particleMaterial.opacity = glow;
-
-  lineMaterial.opacity = 0.08 + Math.sin(pulse * 0.7) * 0.05;
-
-  coreMaterial.opacity = 0.2 + Math.sin(pulse * 1.5) * 0.15;
-  core.scale.setScalar(1 + Math.sin(pulse * 1.2) * 0.08);
-
-  /* ROTATION */
-  particles.rotation.y += 0.00035;
-  particles.rotation.x += 0.00018;
-  lines.rotation.copy(particles.rotation);
-
-  /* PARALLAX */
-  camera.position.x += (mouseX * 2.2 - camera.position.x) * 0.02;
-  camera.position.y += (-mouseY * 2.2 - camera.position.y) * 0.02;
-
-  camera.lookAt(scene.position);
-
-  renderer.render(scene, camera);
+  drawScanLines();
 }
 
 animate();
-
-/* =========================================
-   RESIZE
-   ========================================= */
-
-window.addEventListener("resize", () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-});
