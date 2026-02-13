@@ -1,16 +1,37 @@
+/* =====================================================
+   PITOJO Company - Advanced Particle Galaxy System
+   Explosion on Hover - Ultra Smooth - 60FPS Stable
+===================================================== */
+
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
+/* =============================
+   GLOBAL VARIABLES
+============================= */
+
 let particles = [];
-let scrollOffset = 0;
+let sparks = [];
+let mouse = { x: null, y: null, active: false };
 
 const isMobile = window.innerWidth < 768;
 
-const config = {
-  particleCount: isMobile ? 35 : 110,
-  maxDistance: isMobile ? 70 : 130,
-  speed: isMobile ? 0.25 : 0.6
+/* =============================
+   CONFIGURATION
+============================= */
+
+const CONFIG = {
+  baseParticles: isMobile ? 40 : 120,
+  maxDistance: isMobile ? 70 : 140,
+  baseSpeed: isMobile ? 0.3 : 0.7,
+  explosionParticles: 12,
+  sparkLife: 40,
+  maxFPS: 60
 };
+
+/* =============================
+   CANVAS RESIZE
+============================= */
 
 function resizeCanvas() {
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -24,47 +45,118 @@ function resizeCanvas() {
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-window.addEventListener("scroll", () => {
-  scrollOffset = window.scrollY * 0.2;
+/* =============================
+   MOUSE EVENTS
+============================= */
+
+window.addEventListener("mousemove", (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  mouse.active = true;
 });
+
+window.addEventListener("mouseleave", () => {
+  mouse.active = false;
+});
+
+/* =============================
+   PARTICLE CLASS
+============================= */
 
 class Particle {
   constructor() {
-    this.baseX = Math.random() * window.innerWidth;
-    this.baseY = Math.random() * window.innerHeight;
-    this.x = this.baseX;
-    this.y = this.baseY;
-    this.vx = (Math.random() - 0.5) * config.speed;
-    this.vy = (Math.random() - 0.5) * config.speed;
-    this.radius = isMobile ? 1 : 1.5;
+    this.reset();
+  }
+
+  reset() {
+    this.x = Math.random() * window.innerWidth;
+    this.y = Math.random() * window.innerHeight;
+    this.vx = (Math.random() - 0.5) * CONFIG.baseSpeed;
+    this.vy = (Math.random() - 0.5) * CONFIG.baseSpeed;
+    this.radius = Math.random() * 1.5 + 1;
+    this.colorHue = 200 + Math.random() * 80; // bleu → violet
   }
 
   update() {
-    this.baseX += this.vx;
-    this.baseY += this.vy;
+    this.x += this.vx;
+    this.y += this.vy;
 
-    if (this.baseX < 0 || this.baseX > window.innerWidth) this.vx *= -1;
-    if (this.baseY < 0 || this.baseY > window.innerHeight) this.vy *= -1;
+    if (this.x <= 0 || this.x >= window.innerWidth) this.vx *= -1;
+    if (this.y <= 0 || this.y >= window.innerHeight) this.vy *= -1;
 
-    // Effet scroll subtil
-    this.x = this.baseX;
-    this.y = this.baseY - scrollOffset;
+    // Explosion trigger
+    if (mouse.active) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 20) {
+        this.explode();
+        this.reset();
+      }
+    }
+  }
+
+  explode() {
+    for (let i = 0; i < CONFIG.explosionParticles; i++) {
+      sparks.push(new Spark(this.x, this.y));
+    }
   }
 
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(96,165,250,0.8)";
+    ctx.fillStyle = `hsl(${this.colorHue}, 90%, 65%)`;
     ctx.fill();
   }
 }
 
-function createParticles() {
+/* =============================
+   SPARK CLASS (Explosion)
+============================= */
+
+class Spark {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.angle = Math.random() * Math.PI * 2;
+    this.speed = Math.random() * 3 + 1;
+    this.life = CONFIG.sparkLife;
+    this.radius = Math.random() * 2 + 0.5;
+    this.hue = 180 + Math.random() * 120; // cyan → violet
+  }
+
+  update() {
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
+    this.life--;
+    this.radius *= 0.96;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${this.life / CONFIG.sparkLife})`;
+    ctx.fill();
+  }
+}
+
+/* =============================
+   PARTICLE CREATION
+============================= */
+
+function initParticles() {
   particles = [];
-  for (let i = 0; i < config.particleCount; i++) {
+  for (let i = 0; i < CONFIG.baseParticles; i++) {
     particles.push(new Particle());
   }
 }
+
+initParticles();
+
+/* =============================
+   CONNECTION LINES
+============================= */
 
 function connectParticles() {
   for (let i = 0; i < particles.length; i++) {
@@ -73,8 +165,8 @@ function connectParticles() {
       const dy = particles[i].y - particles[j].y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < config.maxDistance) {
-        ctx.strokeStyle = `rgba(99,102,241,${1 - dist/config.maxDistance})`;
+      if (dist < CONFIG.maxDistance) {
+        ctx.strokeStyle = `hsla(230, 100%, 70%, ${1 - dist / CONFIG.maxDistance})`;
         ctx.lineWidth = 0.4;
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
@@ -85,18 +177,44 @@ function connectParticles() {
   }
 }
 
-function animate() {
+/* =============================
+   MAIN ANIMATION LOOP
+============================= */
+
+let lastFrameTime = 0;
+const frameInterval = 1000 / CONFIG.maxFPS;
+
+function animate(timestamp) {
+
+  if (timestamp - lastFrameTime < frameInterval) {
+    requestAnimationFrame(animate);
+    return;
+  }
+
+  lastFrameTime = timestamp;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Draw base particles
   particles.forEach(p => {
     p.update();
     p.draw();
   });
 
+  // Draw connections
   connectParticles();
+
+  // Update sparks
+  for (let i = sparks.length - 1; i >= 0; i--) {
+    sparks[i].update();
+    sparks[i].draw();
+
+    if (sparks[i].life <= 0) {
+      sparks.splice(i, 1);
+    }
+  }
 
   requestAnimationFrame(animate);
 }
 
-createParticles();
-animate();
+requestAnimationFrame(animate);
