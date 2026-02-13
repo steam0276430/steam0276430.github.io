@@ -2,17 +2,20 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PITOJO Company — Transformation IA pour entreprises</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>PITOJO Company — Accompagnement IA pour entreprises</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 
-/* =========================
+/* =====================================================
 RESET
-========================= */
-*, *::before, *::after {
+===================================================== */
+*,
+*::before,
+*::after{
   margin:0;
   padding:0;
   box-sizing:border-box;
@@ -23,7 +26,6 @@ body{
   background: radial-gradient(circle at 30% 0%, #0e1630 0%, #05060d 70%);
   color:#e5e7eb;
   overflow-x:hidden;
-  scroll-behavior:smooth;
 }
 
 canvas#bg{
@@ -32,40 +34,41 @@ canvas#bg{
   z-index:-1;
 }
 
-/* =========================
+/* =====================================================
 HEADER
-========================= */
+===================================================== */
 header{
   position:fixed;
   top:18px;
   left:50%;
   transform:translateX(-50%);
   width:calc(100% - 60px);
-  max-width:1200px;
-  padding:14px 28px;
+  max-width:1250px;
+  padding:16px 32px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+
   background:rgba(15,23,55,.65);
-  backdrop-filter:blur(18px);
-  border-radius:18px;
+  backdrop-filter:blur(20px);
+  border-radius:20px;
   border:1px solid rgba(255,255,255,.08);
   z-index:100;
 }
 
 .logo{
-  font-weight:800;
-  font-size:16px;
+  font-weight:900;
+  font-size:17px;
   background:linear-gradient(90deg,#60a5fa,#818cf8);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
 nav a{
-  margin-left:24px;
-  color:#cbd5e1;
+  margin-left:26px;
   text-decoration:none;
-  font-size:13px;
+  color:#cbd5e1;
+  font-size:14px;
   transition:.3s;
 }
 
@@ -73,164 +76,150 @@ nav a:hover{
   color:#60a5fa;
 }
 
-/* =========================
+/* =====================================================
 HERO
-========================= */
+===================================================== */
 .hero{
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   text-align:center;
-  padding:120px 8%;
+  padding:140px 8% 80px;
 }
 
 .hero h1{
-  font-size:60px;
+  font-size:64px;
   font-weight:900;
-  max-width:950px;
+  max-width:1000px;
   line-height:1.1;
+  margin-bottom:28px;
+
   background:linear-gradient(90deg,#60a5fa,#a5b4fc);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:24px;
 }
 
 .hero p{
-  max-width:700px;
-  font-size:18px;
-  opacity:.85;
-  margin-bottom:40px;
+  font-size:19px;
+  max-width:720px;
+  opacity:.9;
+  margin-bottom:50px;
 }
 
+/* =====================================================
+CTA GROS BOUTONS
+===================================================== */
 .cta{
   display:flex;
-  gap:20px;
+  gap:28px;
   flex-wrap:wrap;
   justify-content:center;
 }
 
 .btn{
-  padding:16px 40px;
-  border-radius:50px;
-  font-weight:600;
+  padding:22px 60px;
+  border-radius:60px;
+  font-size:18px;
+  font-weight:700;
   cursor:pointer;
   border:none;
-  transition:.3s;
+  transition:.35s;
 }
 
 .btn-primary{
   background:linear-gradient(90deg,#3b82f6,#6366f1);
   color:white;
-  box-shadow:0 20px 60px rgba(99,102,241,.5);
+  box-shadow:0 30px 80px rgba(99,102,241,.6);
 }
 
 .btn-secondary{
   background:rgba(255,255,255,.08);
   color:white;
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(14px);
 }
 
 .btn:hover{
-  transform:translateY(-4px);
+  transform:translateY(-6px) scale(1.04);
 }
 
-/* =========================
+/* =====================================================
 SECTIONS
-========================= */
+===================================================== */
 section{
-  padding:100px 8%;
+  padding:110px 8%;
   text-align:center;
 }
 
 h2{
-  font-size:36px;
-  margin-bottom:60px;
+  font-size:40px;
+  margin-bottom:70px;
 }
 
-/* =========================
-CARDS
-========================= */
+/* =====================================================
+GRILLE CARDS (bulles agrandies)
+===================================================== */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:32px;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+  gap:40px;
 }
 
 .card{
-  padding:40px;
-  border-radius:22px;
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(18px);
+  padding:60px 40px;
+  border-radius:28px;
+
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(22px);
   border:1px solid rgba(255,255,255,.1);
-  transition:.3s;
+
+  transition:.35s;
 }
 
 .card:hover{
-  transform:translateY(-10px);
-  box-shadow:0 30px 100px rgba(99,102,241,.35);
+  transform:translateY(-12px);
+  box-shadow:0 40px 120px rgba(99,102,241,.4);
 }
 
 .card h3{
+  font-size:22px;
+  margin-bottom:18px;
   color:#93c5fd;
-  margin-bottom:15px;
-  font-size:20px;
 }
 
 .card p{
-  font-size:14px;
-  opacity:.85;
-  line-height:1.6;
-}
-
-/* =========================
-STEPS
-========================= */
-.step{
-  padding:25px;
-  border-left:3px solid #6366f1;
-  text-align:left;
-  margin-bottom:30px;
-}
-
-/* =========================
-ABOUT
-========================= */
-.about{
-  max-width:900px;
-  margin:auto;
   font-size:16px;
-  line-height:1.8;
+  line-height:1.7;
   opacity:.9;
 }
 
-/* =========================
+/* =====================================================
+ABOUT
+===================================================== */
+.about{
+  max-width:950px;
+  margin:auto;
+  font-size:17px;
+  line-height:1.9;
+  opacity:.9;
+}
+
+/* =====================================================
 CTA FINAL
-========================= */
+===================================================== */
 .cta-final{
+  padding:90px 30px;
+  border-radius:32px;
   background:rgba(99,102,241,.12);
-  border-radius:30px;
-  padding:80px 20px;
 }
 
-/* =========================
-FOOTER
-========================= */
-footer{
-  padding:60px 20px;
-  text-align:center;
-  font-size:13px;
-  opacity:.6;
-  border-top:1px solid rgba(255,255,255,.05);
-}
-
-/* =========================
+/* =====================================================
 RESPONSIVE
-========================= */
+===================================================== */
 @media(max-width:768px){
-  .hero h1{font-size:36px;}
   nav{display:none;}
+  .hero h1{font-size:40px;}
 }
 
 </style>
@@ -244,87 +233,108 @@ RESPONSIVE
   <div class="logo">PITOJO Company</div>
   <nav>
     <a href="#services">Services</a>
-    <a href="#process">Méthode</a>
     <a href="#about">Entreprise</a>
-    <a href="#contact">RDV</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
-<!-- HERO -->
+<!-- =====================================================
+HERO
+===================================================== -->
 <section class="hero">
-  <h1>Nous aidons vos équipes à maîtriser l’IA pour travailler 2x plus vite</h1>
-  <p>
-    Intervention directe en entreprise, accompagnement sur mesure et automatisation des tâches.
-    Transformez votre productivité grâce à l’intelligence artificielle.
-  </p>
 
-  <div class="cta">
-    <button class="btn btn-primary">Prendre rendez-vous</button>
-    <button class="btn btn-secondary">Découvrir nos services</button>
-  </div>
+<h1>
+Intégrez l’Intelligence Artificielle au cœur de votre entreprise
+</h1>
+
+<p>
+Nous accompagnons vos équipes sur le terrain pour simplifier leurs tâches,
+automatiser les processus répétitifs et améliorer durablement la performance
+de votre organisation.
+</p>
+
+<div class="cta">
+  <button class="btn btn-primary">Prendre rendez-vous</button>
+  <button class="btn btn-secondary">Découvrir notre accompagnement</button>
+</div>
+
 </section>
 
-<!-- SERVICES (remplace tes bulles) -->
+<!-- =====================================================
+SERVICES (bulles agrandies)
+===================================================== -->
 <section id="services">
-  <h2>Ce que nous faisons pour votre entreprise</h2>
 
-  <div class="grid">
-    <div class="card">
-      <h3>Formation des équipes</h3>
-      <p>Nous formons vos collaborateurs à utiliser l’IA concrètement dans leur travail quotidien.</p>
-    </div>
+<h2>Comment nous vous aidons concrètement</h2>
 
-    <div class="card">
-      <h3>Automatisation des tâches</h3>
-      <p>Suppression des tâches répétitives grâce à des workflows intelligents et des agents IA.</p>
-    </div>
+<div class="grid">
 
-    <div class="card">
-      <h3>Optimisation de la productivité</h3>
-      <p>Moins de temps perdu, plus de résultats. Chaque poste gagne en efficacité.</p>
-    </div>
-
-    <div class="card">
-      <h3>Accompagnement sur mesure</h3>
-      <p>Audit, stratégie et déploiement personnalisé selon vos besoins métiers.</p>
-    </div>
+  <div class="card">
+    <h3>Formation opérationnelle</h3>
+    <p>
+      Vos collaborateurs apprennent à utiliser l’IA directement sur leurs tâches réelles.
+      Pas de théorie inutile : uniquement du concret et immédiatement applicable.
+    </p>
   </div>
+
+  <div class="card">
+    <h3>Automatisation intelligente</h3>
+    <p>
+      Nous supprimons les tâches répétitives grâce à des outils et agents IA
+      afin de libérer du temps pour des missions à forte valeur ajoutée.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Optimisation des performances</h3>
+    <p>
+      Meilleure organisation, moins d’erreurs, décisions plus rapides :
+      l’IA devient un véritable levier de croissance pour votre entreprise.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Accompagnement sur mesure</h3>
+    <p>
+      Audit, stratégie, déploiement et suivi continu.
+      Nous adaptons chaque solution à votre secteur et à vos objectifs business.
+    </p>
+  </div>
+
+</div>
+
 </section>
 
-<!-- PROCESS -->
-<section id="process">
-  <h2>Notre méthode</h2>
-
-  <div class="about">
-    <div class="step"><b>01 — Audit</b><br>Analyse de vos processus internes et identification des gains rapides.</div>
-    <div class="step"><b>02 — Déploiement</b><br>Mise en place d’outils IA et automatisations adaptées à votre activité.</div>
-    <div class="step"><b>03 — Formation</b><br>Montée en compétence de vos équipes sur des cas réels.</div>
-    <div class="step"><b>04 — Suivi continu</b><br>Optimisation et amélioration continue des performances.</div>
-  </div>
-</section>
-
-<!-- ABOUT -->
+<!-- =====================================================
+ABOUT
+===================================================== -->
 <section id="about">
-  <h2>À propos de PITOJO Company</h2>
-  <p class="about">
-    PITOJO Company accompagne les entreprises dans leur transformation digitale grâce à l’intelligence artificielle.
-    Nous intervenons directement sur le terrain pour former vos équipes, automatiser vos processus
-    et améliorer durablement votre rendement.
-    Notre objectif : rendre l’IA simple, concrète et rentable pour votre business.
-  </p>
+
+<h2>À propos de PITOJO Company</h2>
+
+<p class="about">
+PITOJO Company est spécialisée dans l’accompagnement des entreprises vers une adoption concrète et rentable de l’intelligence artificielle.
+Nous intervenons directement auprès de vos équipes pour transformer les outils IA en véritables accélérateurs de productivité.
+Notre mission est simple : rendre la technologie utile, compréhensible et immédiatement efficace pour votre activité.
+</p>
+
 </section>
 
-<!-- CTA FINAL -->
+<!-- =====================================================
+CTA FINAL
+===================================================== -->
 <section id="contact">
-  <div class="cta-final">
-    <h2>Prêt à faire évoluer votre entreprise avec l’IA ?</h2>
-    <br>
-    <button class="btn btn-primary">Réserver un appel stratégique</button>
-  </div>
+
+<div class="cta-final">
+  <h2>Discutons de vos besoins et construisons votre stratégie IA</h2>
+  <br><br>
+  <button class="btn btn-primary">Réserver un appel stratégique</button>
+</div>
+
 </section>
 
 <footer>
-© 2026 PITOJO Company — Transformation IA pour entreprises
+© 2026 PITOJO Company — Accompagnement IA pour entreprises
 </footer>
 
 <script src="background.js"></script>
