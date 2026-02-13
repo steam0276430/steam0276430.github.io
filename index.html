@@ -3,51 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PITOJO Company — IA & Automatisation</title>
+  <title>PITOJO Company — Intelligence Artificielle</title>
 
+  <!-- FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* ================= BASE ================= */
+    /* ================= RESET GLOBAL ================= */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at top, #0c1325, #020409);
+      background: radial-gradient(circle at top, #0e1630 0%, #03040a 70%);
       color: #e5e7eb;
       overflow-x: hidden;
     }
 
-    canvas {
+    canvas#bg {
       position: fixed;
       inset: 0;
       z-index: -1;
     }
 
-    /* ================= HEADER ================= */
+    /* ================= HEADER FLOATING ================= */
     header {
       position: fixed;
-      top: 20px;
+      top: 24px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 80px);
-      max-width: 1200px;
-      padding: 14px 28px;
+      width: calc(100% - 120px);
+      max-width: 1300px;
+      padding: 16px 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(10, 15, 35, 0.55);
-      backdrop-filter: blur(18px);
-      border-radius: 18px;
+      background: linear-gradient(
+        180deg,
+        rgba(15, 23, 55, 0.75),
+        rgba(10, 15, 35, 0.45)
+      );
+      backdrop-filter: blur(22px);
+      border-radius: 22px;
       border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
       z-index: 100;
     }
 
-    header .logo {
+    .logo {
       font-weight: 800;
       letter-spacing: 1px;
       font-size: 18px;
@@ -57,125 +68,126 @@
     }
 
     header nav a {
-      margin-left: 26px;
+      margin-left: 28px;
       text-decoration: none;
       color: #c7d2fe;
       font-size: 14px;
-      transition: 0.3s;
+      transition: color 0.3s ease;
     }
 
     header nav a:hover {
-      color: #60a5fa;
+      color: #93c5fd;
     }
 
     /* ================= HERO ================= */
     .hero {
       min-height: 100vh;
-      padding: 180px 10% 120px;
-      text-align: center;
+      padding: 200px 10% 120px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
     }
 
     .hero h1 {
-      font-size: 56px;
-      max-width: 900px;
+      font-size: 60px;
+      max-width: 980px;
       font-weight: 800;
       line-height: 1.1;
       background: linear-gradient(90deg, #60a5fa, #a5b4fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 26px;
+      margin-bottom: 28px;
     }
 
     .hero p {
-      max-width: 620px;
+      max-width: 680px;
       font-size: 18px;
-      opacity: 0.85;
-      line-height: 1.6;
-      margin-bottom: 46px;
+      opacity: 0.9;
+      line-height: 1.7;
+      margin-bottom: 50px;
     }
 
     .hero button {
-      padding: 16px 44px;
-      border-radius: 50px;
+      padding: 18px 52px;
+      border-radius: 60px;
       border: none;
       cursor: pointer;
       font-weight: 600;
       font-size: 16px;
       color: white;
       background: linear-gradient(90deg, #3b82f6, #6366f1);
-      box-shadow: 0 20px 70px rgba(99,102,241,0.45);
-      transition: all 0.4s ease;
+      box-shadow: 0 25px 90px rgba(99,102,241,0.55);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
     }
 
     .hero button:hover {
-      transform: scale(1.08);
-      box-shadow: 0 40px 120px rgba(59,130,246,0.7);
+      transform: scale(1.1);
+      box-shadow: 0 50px 150px rgba(59,130,246,0.8);
     }
 
     /* ================= SECTIONS ================= */
     section {
-      padding: 100px 8%;
+      padding: 110px 8%;
       text-align: center;
     }
 
     section h2 {
-      font-size: 34px;
-      margin-bottom: 60px;
+      font-size: 36px;
+      margin-bottom: 70px;
     }
 
     /* ================= CARDS ================= */
     .cards {
       display: flex;
       justify-content: center;
-      gap: 40px;
+      gap: 46px;
       flex-wrap: wrap;
     }
 
     .card {
-      width: 310px;
-      padding: 42px 34px;
-      border-radius: 26px;
+      width: 320px;
+      padding: 48px 38px;
+      border-radius: 30px;
       background: linear-gradient(
         180deg,
-        rgba(255,255,255,0.10),
+        rgba(255,255,255,0.12),
         rgba(255,255,255,0.02)
       );
-      backdrop-filter: blur(22px);
-      border: 1px solid rgba(255,255,255,0.12);
-      transition: 0.45s ease;
+      backdrop-filter: blur(26px);
+      border: 1px solid rgba(255,255,255,0.14);
+      transition: transform 0.45s ease, box-shadow 0.45s ease;
     }
 
     .card:hover {
-      transform: translateY(-18px) scale(1.03);
-      box-shadow: 0 50px 120px rgba(99,102,241,0.35);
+      transform: translateY(-22px) scale(1.05);
+      box-shadow: 0 60px 160px rgba(99,102,241,0.45);
     }
 
     .card h3 {
-      color: #60a5fa;
-      margin-bottom: 14px;
+      color: #93c5fd;
+      margin-bottom: 16px;
+      font-size: 20px;
     }
 
     .card p {
       font-size: 15px;
-      opacity: 0.85;
-      line-height: 1.6;
+      opacity: 0.9;
+      line-height: 1.7;
     }
 
     /* ================= FOOTER ================= */
     footer {
-      padding: 50px;
+      padding: 60px;
       text-align: center;
       font-size: 14px;
       color: #94a3b8;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
 
-    @media(max-width: 768px) {
-      .hero h1 { font-size: 36px; }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 38px; }
       header nav { display: none; }
     }
   </style>
@@ -197,8 +209,8 @@
 <section class="hero">
   <h1>Formations Professionnelles<br>en Intelligence Artificielle</h1>
   <p>
-    Automatisation, IA avancée et stratégies concrètes pour entrepreneurs
-    et entreprises ambitieuses.
+    Automatisation avancée, agents IA et systèmes intelligents
+    conçus pour entrepreneurs et entreprises ambitieuses.
   </p>
   <button>Réserver un appel stratégique</button>
 </section>
@@ -208,22 +220,17 @@
   <div class="cards">
     <div class="card">
       <h3>IA Fondamentale</h3>
-      <p>Comprendre l’IA moderne et ses usages business.</p>
+      <p>Comprendre l’IA moderne, ses limites et son potentiel réel.</p>
     </div>
     <div class="card">
       <h3>Automatisation IA</h3>
-      <p>Créer des systèmes intelligents auto-scalables.</p>
+      <p>Créer des workflows intelligents auto-scalables.</p>
     </div>
     <div class="card">
-      <h3>IA pour Entrepreneurs</h3>
-      <p>Productivité, agents IA et croissance accélérée.</p>
+      <h3>IA Business</h3>
+      <p>Agents IA, productivité, croissance et avantage concurrentiel.</p>
     </div>
   </div>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <p>contact@pitojo-company.com</p>
 </section>
 
 <footer>
