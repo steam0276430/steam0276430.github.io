@@ -1,367 +1,271 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PITOJO Company - Formations IA</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PITOJO Company - Formations IA</title>
 
-<style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-/* ================= GLOBAL ================= */
+  <style>
+    /* ================= GLOBAL ================= */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background: #050810;
-    color: #e2e8f0;
-    overflow-x: hidden;
-}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #050810;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
 
-#bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
 
-/* ================= NAV ================= */
-
-nav {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 8%;
-    background: rgba(5, 8, 16, 0.6);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    z-index: 10;
-}
-
-nav h2 {
-    color: #38bdf8;
-    font-weight: 800;
-    font-size: 20px;
-}
-
-nav a {
-    color: #cbd5e1;
-    text-decoration: none;
-    margin-left: 25px;
-    font-size: 15px;
-    transition: 0.3s;
-}
-
-nav a:hover {
-    color: #38bdf8;
-}
-
-/* ================= HERO ================= */
-
-.hero {
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 120px 20px 40px 20px;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 48px;
-    font-weight: 800;
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    max-width: 600px;
-    font-size: 17px;
-    opacity: 0.8;
-    margin-bottom: 35px;
-    line-height: 1.6;
-}
-
-.btn {
-    padding: 14px 32px;
-    border-radius: 40px;
-    background: linear-gradient(90deg, #0ea5e9, #6366f1);
-    color: white;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 20px 50px rgba(56,189,248,0.4);
-}
-
-/* ================= SECTIONS ================= */
-
-.section {
-    padding: 80px 8%;
-    text-align: center;
-}
-
-.section h2 {
-    font-size: 32px;
-    margin-bottom: 50px;
-}
-
-/* ================= CARDS ================= */
-
-.cards, .why-grid {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-
-.card, .why-card {
-    width: 280px;
-    padding: 35px;
-    border-radius: 18px;
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
-    transition: 0.4s;
-}
-
-.card:hover, .why-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 25px 60px rgba(56,189,248,0.3);
-}
-
-.card h3, .why-card h3 {
-    color: #38bdf8;
-    margin-bottom: 15px;
-}
-
-/* ================= FOOTER ================= */
-
-footer {
-    padding: 40px;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    color: #64748b;
-    font-size: 14px;
-}
-
-/* ================= MOBILE ================= */
-
-@media(max-width: 768px) {
+    /* ================= NAV ================= */
 
     nav {
-        padding: 15px 5%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 8%;
+      background: rgba(5, 8, 16, 0.6);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      z-index: 10;
     }
 
-    nav div {
-        display: none;
+    nav h2 {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 20px;
     }
+
+    nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    /* ================= HERO ================= */
 
     .hero {
-        padding-top: 100px;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 20px 40px 20px;
+      text-align: center;
     }
 
     .hero h1 {
-        font-size: 30px;
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #38bdf8, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
     }
 
     .hero p {
-        font-size: 15px;
+      max-width: 600px;
+      font-size: 17px;
+      opacity: 0.8;
+      margin-bottom: 35px;
+      line-height: 1.6;
     }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 40px;
+      background: linear-gradient(90deg, #0ea5e9, #6366f1);
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 50px rgba(56,189,248,0.4);
+    }
+
+    /* ================= SECTIONS ================= */
 
     .section {
-        padding: 60px 6%;
+      padding: 80px 8%;
+      text-align: center;
     }
 
-}
+    .section h2 {
+      font-size: 32px;
+      margin-bottom: 50px;
+    }
 
-</style>
+    /* ================= CARDS ================= */
+
+    .cards, .why-grid {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card, .why-card {
+      width: 280px;
+      padding: 35px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: 0.4s;
+    }
+
+    .card:hover, .why-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 25px 60px rgba(56,189,248,0.3);
+    }
+
+    .card h3, .why-card h3 {
+      color: #38bdf8;
+      margin-bottom: 15px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media(max-width: 768px) {
+      nav {
+        padding: 15px 5%;
+      }
+
+      nav div {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 100px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .section {
+        padding: 60px 6%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+  <!-- BACKGROUND CANVAS -->
+  <canvas id="bg"></canvas>
 
-<nav>
+  <nav>
     <h2>PITOJO Company</h2>
     <div>
-        <a href="#formations">Formations</a>
-        <a href="#about">À propos</a>
-        <a href="#contact">Contact</a>
+      <a href="#formations">Formations</a>
+      <a href="#about">À propos</a>
+      <a href="#contact">Contact</a>
     </div>
-</nav>
+  </nav>
 
-<section class="hero">
+  <section class="hero">
     <h1>Formations Professionnelles en Intelligence Artificielle</h1>
     <p>Nous aidons entrepreneurs et entreprises à maîtriser l'IA, automatiser leurs systèmes et générer plus de valeur grâce aux nouvelles technologies.</p>
     <button class="btn">Réserver un appel stratégique</button>
-</section>
+  </section>
 
-<section class="section" id="formations">
+  <section class="section" id="formations">
     <h2>Nos Formations</h2>
     <div class="cards">
-        <div class="card">
-            <h3>IA Fondamentale</h3>
-            <p>Comprendre l’IA et ses applications concrètes.</p>
-        </div>
-        <div class="card">
-            <h3>ChatGPT & Automatisation</h3>
-            <p>Créer des systèmes intelligents pour automatiser votre business.</p>
-        </div>
-        <div class="card">
-            <h3>IA pour Entrepreneurs</h3>
-            <p>Augmenter productivité, ventes et performance.</p>
-        </div>
+      <div class="card">
+        <h3>IA Fondamentale</h3>
+        <p>Comprendre l’IA et ses applications concrètes.</p>
+      </div>
+      <div class="card">
+        <h3>ChatGPT & Automatisation</h3>
+        <p>Créer des systèmes intelligents pour automatiser votre business.</p>
+      </div>
+      <div class="card">
+        <h3>IA pour Entrepreneurs</h3>
+        <p>Augmenter productivité, ventes et performance.</p>
+      </div>
     </div>
-</section>
+  </section>
 
-<section class="section">
+  <section class="section">
     <h2>Pourquoi choisir PITOJO ?</h2>
     <div class="why-grid">
-        <div class="why-card">
-            <h3>🚀 Expertise IA</h3>
-            <p>Formations concrètes adaptées aux entreprises modernes.</p>
-        </div>
-        <div class="why-card">
-            <h3>⚙️ Automatisation réelle</h3>
-            <p>Systèmes intelligents prêts à générer des résultats.</p>
-        </div>
-        <div class="why-card">
-            <h3>📈 Résultats mesurables</h3>
-            <p>Performance et croissance accélérées.</p>
-        </div>
+      <div class="why-card">
+        <h3>🚀 Expertise IA</h3>
+        <p>Formations concrètes adaptées aux entreprises modernes.</p>
+      </div>
+      <div class="why-card">
+        <h3>⚙️ Automatisation réelle</h3>
+        <p>Systèmes intelligents prêts à générer des résultats.</p>
+      </div>
+      <div class="why-card">
+        <h3>📈 Résultats mesurables</h3>
+        <p>Performance et croissance accélérées.</p>
+      </div>
     </div>
-</section>
+  </section>
 
-<section class="section" id="about">
+  <section class="section" id="about">
     <h2>À propos</h2>
     <p>Startup spécialisée en formation IA, accompagnement stratégique et transformation digitale.</p>
-</section>
+  </section>
 
-<section class="section" id="contact">
+  <section class="section" id="contact">
     <h2>Contact</h2>
     <p>Email : contact@pitojo-company.com</p>
-</section>
+  </section>
 
-<footer>
+  <footer>
     © 2026 PITOJO Company — Tous droits réservés
-</footer>
+  </footer>
 
-<script>
-
-/* ================= PREMIUM NETWORK ANIMATION ================= */
-
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-
-let particles = [];
-let mouse = { x: null, y: null };
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-const numberOfParticles = window.innerWidth < 768 ? 60 : 120;
-
-class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.speedX = (Math.random() - 0.5) * 0.6;
-        this.speedY = (Math.random() - 0.5) * 0.6;
-        this.size = 1.5;
-    }
-
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-
-        if (mouse.x && mouse.y) {
-            let dx = this.x - mouse.x;
-            let dy = this.y - mouse.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 120) {
-                this.x += dx / 20;
-                this.y += dy / 20;
-            }
-        }
-    }
-
-    draw() {
-        ctx.fillStyle = "#38bdf8";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
-
-function init() {
-    particles = [];
-    for (let i = 0; i < numberOfParticles; i++) {
-        particles.push(new Particle());
-    }
-}
-
-function connect() {
-    for (let a = 0; a < particles.length; a++) {
-        for (let b = a; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let distance = dx * dx + dy * dy;
-
-            if (distance < 9000) {
-                let opacity = 1 - distance / 9000;
-                ctx.strokeStyle = "rgba(56,189,248," + opacity * 0.15 + ")";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(particles[a].x, particles[a].y);
-                ctx.lineTo(particles[b].x, particles[b].y);
-                ctx.stroke();
-            }
-        }
-    }
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
-    });
-    connect();
-    requestAnimationFrame(animate);
-}
-
-window.addEventListener("mousemove", function(e) {
-    mouse.x = e.x;
-    mouse.y = e.y;
-});
-
-init();
-animate();
-
+  <!-- BACKGROUND SCRIPT -->
+  <script src="background.js"></script>
 
 </body>
 </html>
+
