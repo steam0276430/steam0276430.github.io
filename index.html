@@ -1,343 +1,898 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PITOJO Company — Accompagnement IA pour entreprises</title>
 
-<title>PITOJO Company — Accompagnement IA pour entreprises</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* =====================================================
+      RESET / BASE
+    ===================================================== */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body{
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at 30% 0%, #0e1630 0%, #05060d 70%);
+      color:#e5e7eb;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{ color:inherit; text-decoration:none; }
+    button{ font-family:inherit; }
+    :focus-visible{ outline:2px solid rgba(96,165,250,.85); outline-offset:3px; }
 
-<style>
+    /* Canvas fond */
+    canvas#bg{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+    }
 
-/* =====================================================
-RESET
-===================================================== */
-*,
-*::before,
-*::after{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+    /* =====================================================
+      LAYOUT UTILS
+    ===================================================== */
+    .container{
+      width:min(1180px, calc(100% - 32px));
+      margin-inline:auto;
+    }
+    .muted{ opacity:.9; }
+    .glass{
+      background:rgba(15,23,55,.62);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
 
-body{
-  font-family:'Inter',sans-serif;
-  background: radial-gradient(circle at 30% 0%, #0e1630 0%, #05060d 70%);
-  color:#e5e7eb;
-  overflow-x:hidden;
-}
+    /* =====================================================
+      HEADER
+    ===================================================== */
+    header{
+      position:fixed;
+      top:16px;
+      left:50%;
+      transform:translateX(-50%);
+      width:min(1250px, calc(100% - 24px));
+      z-index:1000;
 
-canvas#bg{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-}
+      border-radius:18px;
+      padding:14px 18px;
+    }
 
-/* =====================================================
-HEADER
-===================================================== */
-header{
-  position:fixed;
-  top:18px;
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 60px);
-  max-width:1250px;
-  padding:16px 32px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+    .head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
 
-  background:rgba(15,23,55,.65);
-  backdrop-filter:blur(20px);
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.08);
-  z-index:100;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+    .logo{
+      font-weight:900;
+      letter-spacing:.3px;
+      font-size:15px;
+      background:linear-gradient(90deg,#60a5fa,#818cf8);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      white-space:nowrap;
+    }
+    .badge{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:#cbd5e1;
+      display:none;
+    }
 
-.logo{
-  font-weight:900;
-  font-size:17px;
-  background:linear-gradient(90deg,#60a5fa,#818cf8);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+    nav{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+    nav a{
+      font-size:14px;
+      color:#cbd5e1;
+      transition:.25s;
+      position:relative;
+    }
+    nav a:hover{ color:#60a5fa; }
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-8px;
+      width:0;
+      height:2px;
+      background:linear-gradient(90deg,#60a5fa,#a5b4fc);
+      transition:.25s;
+      border-radius:2px;
+      opacity:.85;
+    }
+    nav a:hover::after{ width:100%; }
 
-nav a{
-  margin-left:26px;
-  text-decoration:none;
-  color:#cbd5e1;
-  font-size:14px;
-  transition:.3s;
-}
+    .head-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
-nav a:hover{
-  color:#60a5fa;
-}
+    /* Bouton header (optionnel) */
+    .mini-btn{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:#e5e7eb;
+      font-weight:700;
+      font-size:13px;
+      cursor:pointer;
+      transition:.25s;
+      display:none;
+    }
+    .mini-btn:hover{ transform:translateY(-1px); }
 
-/* =====================================================
-HERO
-===================================================== */
-.hero{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:140px 8% 80px;
-}
+    /* Burger */
+    .burger{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:.25s;
+    }
+    .burger:hover{ transform:translateY(-1px); }
+    .burger span{
+      display:block;
+      width:18px;
+      height:2px;
+      background:#cbd5e1;
+      border-radius:2px;
+      position:relative;
+    }
+    .burger span::before,
+    .burger span::after{
+      content:"";
+      position:absolute;
+      left:0;
+      width:18px;
+      height:2px;
+      background:#cbd5e1;
+      border-radius:2px;
+      transition:.2s;
+    }
+    .burger span::before{ top:-6px; }
+    .burger span::after{ top:6px; }
 
-.hero h1{
-  font-size:64px;
-  font-weight:900;
-  max-width:1000px;
-  line-height:1.1;
-  margin-bottom:28px;
+    /* Menu mobile */
+    .mobile-nav{
+      display:none;
+      margin-top:12px;
+      border-radius:16px;
+      padding:12px;
+    }
+    .mobile-nav a{
+      display:block;
+      padding:12px 12px;
+      border-radius:12px;
+      color:#cbd5e1;
+      font-weight:600;
+      font-size:14px;
+    }
+    .mobile-nav a:hover{
+      background:rgba(255,255,255,.06);
+      color:#60a5fa;
+    }
+    .mobile-nav .mobile-cta{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(99,102,241,.12);
+      border:1px solid rgba(99,102,241,.22);
+    }
 
-  background:linear-gradient(90deg,#60a5fa,#a5b4fc);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+    /* =====================================================
+      HERO
+    ===================================================== */
+    .hero{
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      text-align:center;
+      padding-top:110px; /* espace pour le header */
+      padding-bottom:70px;
+    }
+    .hero-inner{
+      width:100%;
+      padding:42px 0 0;
+    }
+    .hero h1{
+      font-weight:900;
+      letter-spacing:-.02em;
+      line-height:1.05;
+      margin-bottom:18px;
 
-.hero p{
-  font-size:19px;
-  max-width:720px;
-  opacity:.9;
-  margin-bottom:50px;
-}
+      font-size:clamp(34px, 5vw, 64px);
+      background:linear-gradient(90deg,#60a5fa,#a5b4fc);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .hero p{
+      font-size:clamp(15px, 2vw, 19px);
+      max-width:760px;
+      margin:0 auto 28px;
+      opacity:.92;
+      line-height:1.7;
+    }
 
-/* =====================================================
-CTA GROS BOUTONS
-===================================================== */
-.cta{
-  display:flex;
-  gap:28px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+    .hero-pills{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+      margin:0 auto 26px;
+      max-width:900px;
+    }
+    .pill{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:#dbeafe;
+      font-size:13px;
+      font-weight:700;
+      opacity:.95;
+    }
 
-.btn{
-  padding:22px 60px;
-  border-radius:60px;
-  font-size:18px;
-  font-weight:700;
-  cursor:pointer;
-  border:none;
-  transition:.35s;
-}
+    /* CTA */
+    .cta{
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:10px;
+    }
 
-.btn-primary{
-  background:linear-gradient(90deg,#3b82f6,#6366f1);
-  color:white;
-  box-shadow:0 30px 80px rgba(99,102,241,.6);
-}
+    .btn{
+      padding:18px 34px;
+      border-radius:999px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      border:0;
+      transition:.25s;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-width:240px;
+    }
+    .btn-primary{
+      background:linear-gradient(90deg,#3b82f6,#6366f1);
+      color:white;
+      box-shadow:0 24px 80px rgba(99,102,241,.45);
+    }
+    .btn-secondary{
+      background:rgba(255,255,255,.08);
+      color:white;
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    .btn:hover{ transform:translateY(-4px); }
 
-.btn-secondary{
-  background:rgba(255,255,255,.08);
-  color:white;
-  backdrop-filter:blur(14px);
-}
+    /* Mini preuve */
+    .proof{
+      margin-top:26px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      opacity:.92;
+    }
+    .proof-item{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      font-size:13px;
+      color:#cbd5e1;
+    }
 
-.btn:hover{
-  transform:translateY(-6px) scale(1.04);
-}
+    /* =====================================================
+      SECTIONS
+    ===================================================== */
+    section.block{
+      padding:90px 0;
+      text-align:center;
+    }
+    h2{
+      font-size:clamp(26px, 3.5vw, 40px);
+      margin-bottom:18px;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      max-width:860px;
+      margin:0 auto 48px;
+      opacity:.9;
+      line-height:1.7;
+      font-size:clamp(14px, 2vw, 16px);
+    }
 
-/* =====================================================
-SECTIONS
-===================================================== */
-section{
-  padding:110px 8%;
-  text-align:center;
-}
+    /* Cards */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+      text-align:left;
+    }
+    .card{
+      grid-column:span 6;
+      padding:26px 22px;
+      border-radius:22px;
 
-h2{
-  font-size:40px;
-  margin-bottom:70px;
-}
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
 
-/* =====================================================
-GRILLE CARDS (bulles agrandies)
-===================================================== */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-  gap:40px;
-}
+      transition:.28s;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-80px -80px auto auto;
+      width:160px;
+      height:160px;
+      background:radial-gradient(circle, rgba(99,102,241,.20), transparent 55%);
+      transform:rotate(18deg);
+    }
+    .card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 34px 110px rgba(99,102,241,.28);
+    }
+    .card h3{
+      font-size:18px;
+      margin-bottom:10px;
+      color:#93c5fd;
+      font-weight:900;
+      letter-spacing:-.01em;
+    }
+    .card p{
+      font-size:15px;
+      line-height:1.75;
+      opacity:.92;
+    }
+    .card small{
+      display:block;
+      margin-top:10px;
+      color:#a5b4fc;
+      opacity:.9;
+      font-weight:700;
+    }
 
-.card{
-  padding:60px 40px;
-  border-radius:28px;
+    /* Process */
+    .process{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+      margin-top:22px;
+      text-align:left;
+    }
+    .step{
+      grid-column:span 4;
+      padding:22px;
+      border-radius:22px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .step .n{
+      width:40px; height:40px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      background:rgba(96,165,250,.15);
+      border:1px solid rgba(96,165,250,.22);
+      margin-bottom:10px;
+      color:#dbeafe;
+    }
+    .step h3{
+      font-size:16px;
+      margin-bottom:8px;
+      font-weight:900;
+      color:#e5e7eb;
+    }
+    .step p{
+      font-size:14px;
+      line-height:1.7;
+      opacity:.9;
+    }
 
-  background:rgba(255,255,255,.06);
-  backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.1);
+    /* About */
+    .about-wrap{
+      text-align:left;
+      max-width:980px;
+      margin:0 auto;
+      padding:30px;
+      border-radius:26px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+    .about-wrap p{
+      font-size:15px;
+      line-height:1.85;
+      opacity:.92;
+    }
+    .about-grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+    .about-kpi{
+      grid-column:span 4;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .about-kpi b{
+      display:block;
+      font-size:16px;
+      margin-bottom:4px;
+    }
+    .about-kpi span{
+      display:block;
+      font-size:13px;
+      opacity:.85;
+      line-height:1.5;
+    }
 
-  transition:.35s;
-}
+    /* Contact */
+    .cta-final{
+      padding:36px 22px;
+      border-radius:28px;
+      background:rgba(99,102,241,.12);
+      border:1px solid rgba(99,102,241,.22);
+    }
 
-.card:hover{
-  transform:translateY(-12px);
-  box-shadow:0 40px 120px rgba(99,102,241,.4);
-}
+    .contact-grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+      margin-top:18px;
+      text-align:left;
+    }
+    .contact-left{
+      grid-column:span 5;
+      padding:22px;
+      border-radius:22px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .contact-left p{
+      font-size:14px;
+      line-height:1.75;
+      opacity:.9;
+      margin-top:8px;
+    }
+    .contact-info{
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+    }
+    .info-row{
+      padding:12px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:14px;
+      color:#cbd5e1;
+      word-break:break-word;
+    }
 
-.card h3{
-  font-size:22px;
-  margin-bottom:18px;
-  color:#93c5fd;
-}
+    form{
+      grid-column:span 7;
+      padding:22px;
+      border-radius:22px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:12px;
+    }
+    label{
+      font-size:13px;
+      font-weight:800;
+      color:#dbeafe;
+      opacity:.95;
+    }
+    input, textarea{
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(7,10,20,.40);
+      color:#e5e7eb;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{ min-height:120px; resize:vertical; }
+    input::placeholder, textarea::placeholder{ color:rgba(203,213,225,.65); }
+    .form-row{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:12px;
+    }
+    .col-6{ grid-column:span 6; }
+    .col-12{ grid-column:span 12; }
 
-.card p{
-  font-size:16px;
-  line-height:1.7;
-  opacity:.9;
-}
+    .form-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:6px;
+    }
+    .fineprint{
+      font-size:12px;
+      opacity:.75;
+      line-height:1.5;
+    }
 
-/* =====================================================
-ABOUT
-===================================================== */
-.about{
-  max-width:950px;
-  margin:auto;
-  font-size:17px;
-  line-height:1.9;
-  opacity:.9;
-}
+    /* Footer */
+    footer{
+      padding:34px 0 46px;
+      text-align:center;
+      color:#9ca3af;
+      font-size:13px;
+      opacity:.95;
+    }
 
-/* =====================================================
-CTA FINAL
-===================================================== */
-.cta-final{
-  padding:90px 30px;
-  border-radius:32px;
-  background:rgba(99,102,241,.12);
-}
+    /* =====================================================
+      RESPONSIVE
+    ===================================================== */
+    @media (max-width: 980px){
+      .card{ grid-column:span 12; }
+      .step{ grid-column:span 12; }
+      .about-kpi{ grid-column:span 12; }
+      .contact-left{ grid-column:span 12; }
+      form{ grid-column:span 12; }
+      .mini-btn{ display:inline-flex; }
+      .badge{ display:inline-flex; }
+    }
 
-/* =====================================================
-RESPONSIVE
-===================================================== */
-@media(max-width:768px){
-  nav{display:none;}
-  .hero h1{font-size:40px;}
-}
+    @media (max-width: 768px){
+      nav{ display:none; }
+      .burger{ display:flex; }
+      .mobile-nav{ display:none; }
+      header{ top:12px; }
+      .hero{ padding-top:104px; }
+      .btn{ min-width:0; width:100%; }
+      .cta{ width:100%; }
+      .container{ width:min(1180px, calc(100% - 24px)); }
+      .form-row{ gap:10px; }
+      .col-6{ grid-column:span 12; }
+    }
 
-</style>
+    /* Safe area iPhone */
+    @supports(padding: max(0px)){
+      header{
+        padding-left:max(18px, env(safe-area-inset-left));
+        padding-right:max(18px, env(safe-area-inset-right));
+      }
+      .hero{
+        padding-bottom:max(70px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* Animation légère */
+    @media (prefers-reduced-motion: reduce){
+      *{ scroll-behavior:auto !important; transition:none !important; }
+      .btn:hover, .card:hover{ transform:none !important; }
+    }
+  </style>
 </head>
 
 <body>
+  <canvas id="bg"></canvas>
 
-<canvas id="bg"></canvas>
+  <header class="glass">
+    <div class="head">
+      <div class="brand">
+        <div class="logo">PITOJO Company</div>
+        <div class="badge">Accompagnement entreprises</div>
+      </div>
 
-<header>
-  <div class="logo">PITOJO Company</div>
-  <nav>
-    <a href="#services">Services</a>
-    <a href="#about">Entreprise</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+      <nav aria-label="Navigation principale">
+        <a href="#services">Services</a>
+        <a href="#process">Méthode</a>
+        <a href="#about">Entreprise</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-<!-- =====================================================
-HERO
-===================================================== -->
-<section class="hero">
+      <div class="head-actions">
+        <a class="mini-btn" href="#contact">Prendre rendez-vous</a>
+        <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNav">
+          <span></span>
+        </button>
+      </div>
+    </div>
 
-<h1>
-Intégrez l’Intelligence Artificielle au cœur de votre entreprise
-</h1>
+    <div id="mobileNav" class="mobile-nav glass" aria-label="Menu mobile">
+      <a href="#services">Services</a>
+      <a href="#process">Méthode</a>
+      <a href="#about">Entreprise</a>
+      <a href="#contact">Contact</a>
+      <div class="mobile-cta">
+        <a class="btn btn-primary" style="width:100%; min-width:0; padding:14px 18px;" href="#contact">
+          Réserver un appel
+        </a>
+      </div>
+    </div>
+  </header>
 
-<p>
-Nous accompagnons vos équipes sur le terrain pour simplifier leurs tâches,
-automatiser les processus répétitifs et améliorer durablement la performance
-de votre organisation.
-</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-pills" aria-hidden="true">
+        <div class="pill">Formation concrète</div>
+        <div class="pill">Automatisation</div>
+        <div class="pill">Déploiement sur le terrain</div>
+        <div class="pill">Résultats mesurables</div>
+      </div>
 
-<div class="cta">
-  <button class="btn btn-primary">Prendre rendez-vous</button>
-  <button class="btn btn-secondary">Découvrir notre accompagnement</button>
-</div>
+      <h1>Intégrez l’Intelligence Artificielle au cœur de votre entreprise</h1>
 
-</section>
+      <p class="muted">
+        Nous accompagnons vos équipes pour simplifier leurs tâches, automatiser les processus répétitifs
+        et améliorer durablement la performance de votre organisation — en visio ou directement sur site.
+      </p>
 
-<!-- =====================================================
-SERVICES (bulles agrandies)
-===================================================== -->
-<section id="services">
+      <div class="cta">
+        <a class="btn btn-primary" href="#contact">Prendre rendez-vous</a>
+        <a class="btn btn-secondary" href="#services">Découvrir l’accompagnement</a>
+      </div>
 
-<h2>Comment nous vous aidons concrètement</h2>
+      <div class="proof" aria-label="Preuves rapides">
+        <div class="proof-item">✅ Cas concrets par métier</div>
+        <div class="proof-item">✅ Mise en place d’outils & automatisations</div>
+        <div class="proof-item">✅ Support après la session</div>
+      </div>
+    </div>
+  </section>
 
-<div class="grid">
+  <!-- SERVICES -->
+  <section id="services" class="block">
+    <div class="container">
+      <h2>Comment nous vous aidons concrètement</h2>
+      <p class="subtitle">
+        Pas de blabla : on part de vos tâches réelles. L’objectif est simple — gagner du temps, réduire les erreurs,
+        et standardiser ce qui peut l’être.
+      </p>
 
-  <div class="card">
-    <h3>Formation opérationnelle</h3>
-    <p>
-      Vos collaborateurs apprennent à utiliser l’IA directement sur leurs tâches réelles.
-      Pas de théorie inutile : uniquement du concret et immédiatement applicable.
-    </p>
-  </div>
+      <div class="grid">
+        <div class="card">
+          <h3>Formation opérationnelle</h3>
+          <p>
+            Vos collaborateurs apprennent à utiliser les bons outils (et surtout les bonnes méthodes) sur des
+            cas réels : emails, comptes-rendus, devis, support client, marketing…
+          </p>
+          <small>Objectif : adoption immédiate</small>
+        </div>
 
-  <div class="card">
-    <h3>Automatisation intelligente</h3>
-    <p>
-      Nous supprimons les tâches répétitives grâce à des outils et agents IA
-      afin de libérer du temps pour des missions à forte valeur ajoutée.
-    </p>
-  </div>
+        <div class="card">
+          <h3>Automatisation intelligente</h3>
+          <p>
+            Nous supprimons les tâches répétitives (tri, rédaction, extraction, réponses types, reporting)
+            pour libérer du temps et fiabiliser les process.
+          </p>
+          <small>Objectif : moins de charge, plus de vitesse</small>
+        </div>
 
-  <div class="card">
-    <h3>Optimisation des performances</h3>
-    <p>
-      Meilleure organisation, moins d’erreurs, décisions plus rapides :
-      l’IA devient un véritable levier de croissance pour votre entreprise.
-    </p>
-  </div>
+        <div class="card">
+          <h3>Optimisation des performances</h3>
+          <p>
+            Meilleure organisation, moins d’aller-retours, décisions plus rapides : vous gagnez en clarté,
+            en qualité et en productivité.
+          </p>
+          <small>Objectif : efficacité mesurable</small>
+        </div>
 
-  <div class="card">
-    <h3>Accompagnement sur mesure</h3>
-    <p>
-      Audit, stratégie, déploiement et suivi continu.
-      Nous adaptons chaque solution à votre secteur et à vos objectifs business.
-    </p>
-  </div>
+        <div class="card">
+          <h3>Accompagnement sur mesure</h3>
+          <p>
+            Audit, stratégie, déploiement et suivi. On adapte l’approche à votre secteur, à votre maturité,
+            et à vos contraintes terrain.
+          </p>
+          <small>Objectif : du sur-mesure, pas du générique</small>
+        </div>
+      </div>
+    </div>
+  </section>
 
-</div>
+  <!-- PROCESS -->
+  <section id="process" class="block">
+    <div class="container">
+      <h2>Une méthode simple, claire et efficace</h2>
+      <p class="subtitle">
+        Une intégration réussie se joue sur l’exécution. Voici notre façon de procéder pour éviter les “projets IA”
+        qui restent au stade de la démo.
+      </p>
 
-</section>
+      <div class="process">
+        <div class="step">
+          <div class="n">1</div>
+          <h3>Diagnostic express</h3>
+          <p>On identifie les tâches répétitives et les gains rapides : temps, coûts, erreurs, qualité.</p>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h3>Session terrain / visio</h3>
+          <p>Formation + mise en pratique immédiate sur vos documents et vos process.</p>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h3>Déploiement + suivi</h3>
+          <p>On standardise, on automatise, puis on vous suit pour garantir l’adoption.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!-- =====================================================
-ABOUT
-===================================================== -->
-<section id="about">
+  <!-- ABOUT -->
+  <section id="about" class="block">
+    <div class="container">
+      <h2>À propos de PITOJO Company</h2>
+      <p class="subtitle">Notre mission : rendre la technologie utile, compréhensible et rentable.</p>
 
-<h2>À propos de PITOJO Company</h2>
+      <div class="about-wrap">
+        <p>
+          PITOJO Company est spécialisée dans l’accompagnement des entreprises vers une adoption concrète de
+          l’intelligence artificielle. Nous intervenons directement auprès de vos équipes pour transformer les outils
+          en véritables accélérateurs de productivité. Notre approche est pragmatique : on vise des résultats visibles,
+          et on construit des habitudes de travail solides (pas des “tips” oubliés le lendemain).
+        </p>
 
-<p class="about">
-PITOJO Company est spécialisée dans l’accompagnement des entreprises vers une adoption concrète et rentable de l’intelligence artificielle.
-Nous intervenons directement auprès de vos équipes pour transformer les outils IA en véritables accélérateurs de productivité.
-Notre mission est simple : rendre la technologie utile, compréhensible et immédiatement efficace pour votre activité.
-</p>
+        <div class="about-grid" aria-label="Points clés">
+          <div class="about-kpi">
+            <b>Pratique</b>
+            <span>On travaille sur vos cas réels, pas sur des exemples génériques.</span>
+          </div>
+          <div class="about-kpi">
+            <b>Mesurable</b>
+            <span>Temps gagné, erreurs réduites, process standardisés.</span>
+          </div>
+          <div class="about-kpi">
+            <b>Durable</b>
+            <span>Suivi et support pour que ça reste en place.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-</section>
+  <!-- CONTACT -->
+  <section id="contact" class="block">
+    <div class="container">
+      <div class="cta-final">
+        <h2>Discutons de vos besoins</h2>
+        <p class="subtitle" style="margin-bottom:0;">
+          Décrivez votre activité, vos tâches chronophages et ce que vous voulez améliorer. On vous répond rapidement.
+        </p>
 
-<!-- =====================================================
-CTA FINAL
-===================================================== -->
-<section id="contact">
+        <div class="contact-grid">
+          <div class="contact-left">
+            <h3 style="color:#93c5fd; font-weight:900; margin-bottom:6px;">Coordonnées</h3>
+            <p>Vous pouvez aussi nous contacter directement.</p>
 
-<div class="cta-final">
-  <h2>Discutons de vos besoins et construisons votre stratégie IA</h2>
-  <br><br>
-  <button class="btn btn-primary">Réserver un appel stratégique</button>
-</div>
+            <div class="contact-info">
+              <div class="info-row">📞 Téléphone : <b>06 00 00 00 00</b></div>
+              <div class="info-row">✉️ Email : <b>contact@pitojo.fr</b></div>
+              <div class="info-row">📍 Intervention : <b>Visio + sur site (France)</b></div>
+            </div>
 
-</section>
+            <p style="margin-top:14px; font-size:13px; opacity:.8;">
+              Conseil : plus votre demande est précise (métier, tâches, objectifs), plus la réponse sera utile.
+            </p>
+          </div>
 
-<footer>
-© 2026 PITOJO Company — Accompagnement IA pour entreprises
-</footer>
+          <!-- Formulaire (simple, sans backend) -->
+          <form onsubmit="event.preventDefault(); alert('Message envoyé (démo). Ajoute un backend ou Formspree pour recevoir les messages.');">
+            <div class="form-row">
+              <div class="field col-6">
+                <label for="name">Nom</label>
+                <input id="name" name="name" type="text" placeholder="Votre nom" required>
+              </div>
+              <div class="field col-6">
+                <label for="company">Entreprise</label>
+                <input id="company" name="company" type="text" placeholder="Nom de l’entreprise" required>
+              </div>
+              <div class="field col-6">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="vous@entreprise.fr" required>
+              </div>
+              <div class="field col-6">
+                <label for="phone">Téléphone</label>
+                <input id="phone" name="phone" type="tel" placeholder="06 00 00 00 00">
+              </div>
+              <div class="field col-12">
+                <label for="message">Votre besoin</label>
+                <textarea id="message" name="message" placeholder="Ex : automatiser les réponses mails, gagner du temps sur les devis, créer des comptes-rendus..." required></textarea>
+              </div>
+            </div>
 
-<script src="background.js"></script>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" style="min-width:0;">Envoyer</button>
+              <div class="fineprint">
+                En envoyant ce formulaire, vous acceptez d’être recontacté. (Ajoutez une page Politique de confidentialité si vous collectez des données.)
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <footer>
+    © 2026 PITOJO Company — Accompagnement IA pour entreprises
+  </footer>
+
+  <script>
+    // Menu mobile
+    const burger = document.getElementById('burger');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function closeMobileNav(){
+      mobileNav.style.display = 'none';
+      burger.setAttribute('aria-expanded', 'false');
+    }
+
+    burger?.addEventListener('click', () => {
+      const opened = burger.getAttribute('aria-expanded') === 'true';
+      if (opened) {
+        closeMobileNav();
+      } else {
+        mobileNav.style.display = 'block';
+        burger.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Ferme le menu quand on clique un lien
+    mobileNav?.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => closeMobileNav());
+    });
+
+    // Ferme si on redimensionne vers desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) closeMobileNav();
+    });
+  </script>
+
+  <!-- Ton fond animé -->
+  <script src="background.js"></script>
 </body>
 </html>
